@@ -3,7 +3,7 @@ import urllib.request
 from tools import TOOL_MAP
 
 import os
-API_KEY = os.environ.get("OPENROUTER_API_KEY", "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")
+API_KEY = os.environ.get("OPENROUTER_API_KEY", "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")
 
 
 def run_agent(ticker: str) -> str:
