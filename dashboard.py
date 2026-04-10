@@ -35,12 +35,22 @@ if col1.button("TSLA"): ticker = "TSLA"
 if col2.button("MSFT"): ticker = "MSFT"
 
 # ── Load Data ─────────────────────────────────────────────────
-@st.cache_data(ttl=60)
+@st.cache_data(ttl=300)
 def load_data(ticker, period):
-    stock = yf.Ticker(ticker)
-    hist = stock.history(period=period)
-    info = stock.info
-    return hist, info
+    import time
+    for attempt in range(3):
+        try:
+            stock = yf.Ticker(ticker)
+            hist = stock.history(period=period)
+            if hist.empty:
+                raise ValueError("Empty data")
+            info = stock.info
+            return hist, info
+        except Exception as e:
+            if attempt < 2:
+                time.sleep(5)
+            else:
+                raise e
 
 try:
     with st.spinner(f"Loading {ticker} data..."):
