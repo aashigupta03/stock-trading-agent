@@ -1,10 +1,9 @@
 import json
 import urllib.request
+import os
 from tools import TOOL_MAP
 
-import os
-API_KEY = os.environ.get("OPENROUTER_API_KEY", "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")
-
+API_KEY = os.environ.get("OPENROUTER_API_KEY", "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")
 
 def run_agent(ticker: str) -> str:
     print(f"\n🤖 Agent analyzing {ticker}...\n")
@@ -31,7 +30,7 @@ News Headlines: {json.dumps(news)}
 Give your recommendation and confidence level 1-10."""
 
     data = json.dumps({
-        "model": "google/gemma-3-4b-it:free",
+        "model": "meta-llama/llama-3.2-3b-instruct:free",
         "messages": [{"role": "user", "content": prompt}]
     }).encode("utf-8")
 
@@ -54,6 +53,6 @@ Give your recommendation and confidence level 1-10."""
                 print(f"💬 Agent Decision:\n{answer}")
                 return answer
         except Exception as e:
-            print(f"⏳ Rate limited, waiting 30 seconds... (attempt {attempt+1}/3)")
+            print(f"⏳ Waiting 30 seconds... (attempt {attempt+1}/3)")
             time.sleep(30)
     return "Could not get decision after 3 attempts"
